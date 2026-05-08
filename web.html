@@ -34,6 +34,10 @@
       font-family: "Space Grotesk", "Avenir Next", sans-serif;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     #shader-layer {
       position: fixed;
       inset: 0;
@@ -72,10 +76,18 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       font-size: 12px;
+      z-index: 999;
     }
 
-    .topbar div span {
+    .topbar div a {
       margin-left: 24px;
+      color: var(--paper);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .topbar div a:hover {
+      color: var(--muted);
     }
 
     .hero {
@@ -137,6 +149,27 @@
       color: var(--paper);
     }
 
+    .about,
+    .shows,
+    .installations,
+    .residents,
+    .stripe {
+      scroll-margin-top: 90px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(44px);
+      transition: transform 760ms cubic-bezier(0.2, 0.72, 0.16, 1), opacity 760ms ease;
+      transition-delay: var(--reveal-delay, 0ms);
+      will-change: transform, opacity;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     .installations {
       margin-top: 10vh;
       border-top: 1px solid var(--paper);
@@ -171,6 +204,13 @@
       /* backdrop-filter: blur(2px); */
       /* box-shadow: 0 6px 6px rgba(255, 165, 0, 0.35); */
       transition: margin 260ms ease;
+    }
+
+    .installation-item.reveal {
+      transition: margin 260ms ease,
+        transform 760ms cubic-bezier(0.2, 0.72, 0.16, 1),
+        opacity 760ms ease;
+      transition-delay: var(--reveal-delay, 0ms);
     }
 
     .installation-item img {
@@ -253,6 +293,12 @@
 
     .resident-card {
       scroll-snap-align: start;
+    }
+
+    .residents-track .resident-card.reveal {
+      transform: none;
+      transition: opacity 760ms ease;
+      transition-delay: var(--reveal-delay, 0ms);
     }
 
     .resident-card img {
@@ -369,10 +415,10 @@
       <span>Future Storytelling Lab</span>
       <!-- <span class="accent">Installations + Shows</span> -->
       <div>
-        <span>About</span>
-        <span>Residents</span>
-        <span>Programme</span>
-        <span>Contact</span>
+        <a href="#about" data-target="about">About</a>
+        <a href="#residents" data-target="residents">Residents</a>
+        <a href="#programme" data-target="programme">Programme</a>
+        <a href="#contact" data-target="contact">Contact</a>
       </div>
     </header>
 
@@ -386,11 +432,11 @@
       </p>
     </section>
 
-    <section class="about">
+    <section id="about" class="about reveal">
       <div class="section-head">
         <h2>About</h2>
       </div>
-      <p class="about-copy">
+      <p class="about-copy reveal">
         Future Storytelling Lab is a space for experimentation across visual culture, performance,
         design, and digital narration. We bring together makers, researchers, and audiences through
         public programmes, resident trajectories, and collaborative formats that explore how stories
@@ -398,30 +444,30 @@
       </p>
     </section>
 
-    <section class="shows">
+    <section id="upcoming" class="shows reveal">
       <div class="section-head">
         <h2>Upcoming</h2>
       </div>
       <div class="shows-table">
-        <div class="show-row">
+        <div class="show-row reveal">
           <span class="label">May 2026</span>
           <span>FSL: Red Tide</span>
           <span>Warehouse 9, Rotterdam</span>
           <span class="status live">Live</span>
         </div>
-        <div class="show-row">
+        <div class="show-row reveal">
           <span class="label">Mar 2026</span>
           <span>Pulse Chamber</span>
           <span>Transit Hall, Berlin</span>
           <span class="status">Archive</span>
         </div>
-        <div class="show-row">
+        <div class="show-row reveal">
           <span class="label">Nov 2025</span>
           <span>Field Works</span>
           <span>Dock Gallery, Lisbon</span>
           <span class="status">Archive</span>
         </div>
-        <div class="show-row">
+        <div class="show-row reveal">
           <span class="label">Jun 2025</span>
           <span>Reactive Terrain</span>
           <span>Canal Stage, Amsterdam</span>
@@ -430,13 +476,13 @@
       </div>
     </section>
 
-    <section class="installations">
+    <section id="programme" class="installations reveal">
       <div class="section-head">
         <h2>Programme</h2>
       </div>
 
       <div class="installation-list">
-        <article class="installation-item align-left">
+        <article class="installation-item align-left reveal">
           <img src="./Programma/661e66b58bc4935ac2ac284d_Into%20the%20com%20screenshot.png"
             alt="Programme image for Into the Com">
           <div class="installation-meta">
@@ -448,7 +494,7 @@
           </div>
         </article>
 
-        <article class="installation-item align-center">
+        <article class="installation-item align-center reveal">
           <img src="./Programma/661e66b50a10be7ce7fe9321_screenshot%20chafik.png" alt="Programme image for Chafik">
           <div class="installation-meta">
             <div>
@@ -459,7 +505,7 @@
           </div>
         </article>
 
-        <article class="installation-item align-right">
+        <article class="installation-item align-right reveal">
           <img src="./Programma/661e66b5c9f555de53ac8feb_conclusie%20screenshot.png"
             alt="Programme image for Conclusie">
           <div class="installation-meta">
@@ -471,7 +517,7 @@
           </div>
         </article>
 
-        <article class="installation-item align-center">
+        <article class="installation-item align-center reveal">
           <img src="./Programma/661fa84fb21afa0b0ef98e1e_Foto%20website.png"
             alt="Programme image from the website archive">
           <div class="installation-meta">
@@ -485,22 +531,22 @@
       </div>
     </section>
 
-    <section class="residents">
+    <section id="residents" class="residents reveal">
       <div class="section-head">
         <h2>Residents</h2>
       </div>
       <div class="residents-track">
-        <article class="resident-card">
+        <article class="resident-card reveal" style="--reveal-delay: 90ms;">
           <img src="./Residents/668e8b0f3dde69f9bcd6258f_FSL%20Poster%20Lisa.png" alt="Resident poster for Lisa">
           <h3>Lisa</h3>
           <p>Resident</p>
         </article>
-        <article class="resident-card">
+        <article class="resident-card reveal" style="--reveal-delay: 220ms;">
           <img src="./Residents/660d21b4033e61c889a989b6_FSL%20Poster%20Sophie.png" alt="Resident poster for Sophie">
           <h3>Sophie</h3>
           <p>Resident</p>
         </article>
-        <article class="resident-card">
+        <article class="resident-card reveal" style="--reveal-delay: 350ms;">
           <img src="./Residents/660d1fe7d88b2b2db8eddb7f_FSL%20Poster%20Niek.png" alt="Resident poster for Niek">
           <h3>Niek</h3>
           <p>Resident</p>
@@ -509,7 +555,7 @@
     </section>
 
 
-    <section class="stripe">
+    <section id="contact" class="stripe reveal">
       <span>Future Storytelling Lab</span>
       <span>© 2026</span>
       <span>Contact</span>
@@ -617,6 +663,45 @@
       targetMY = e.clientY;
       mouseActive = true;
     }, { passive: true });
+
+    // Slide-up reveal animation for sections and cards.
+    const revealTargets = document.querySelectorAll('.reveal');
+    revealTargets.forEach((el, i) => {
+      if (!el.style.getPropertyValue('--reveal-delay')) {
+        const delay = (i % 8) * 55;
+        el.style.setProperty('--reveal-delay', `${delay}ms`);
+      }
+    });
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        } else {
+          entry.target.classList.remove('is-visible');
+        }
+      });
+    }, {
+      threshold: 0.08,
+      rootMargin: '0px 0px -8% 0px'
+    });
+
+    revealTargets.forEach((el) => revealObserver.observe(el));
+
+    // Menu links scroll to sections with fixed-header offset.
+    const navLinks = document.querySelectorAll('.topbar a[data-target]');
+    navLinks.forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const id = link.getAttribute('data-target');
+        const target = document.getElementById(id);
+        if (!target) return;
+        const header = document.querySelector('.topbar');
+        const offset = header ? header.offsetHeight + 18 : 0;
+        const y = target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      });
+    });
 
   </script>
 
