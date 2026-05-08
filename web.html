@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>FSL</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+  <style>
+    :root {
+      --paper: #efe9df;
+      --paper-soft: #d9d1c4;
+      --ink: #121212;
+      --muted: rgb(255, 165, 0);
+      --accent: #d11111;
+    }
+
+    .hero div {
+      display: flex;
+      align-items: center;
+    }
+
+    .hero div img {
+      width: auto;
+      height: 350px;
+      margin-right: 20px;
+      margin-top: 48px;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background: var(--ink);
+      color: var(--paper);
+      font-family: "Space Grotesk", "Avenir Next", sans-serif;
+    }
+
+    #shader-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      display: block;
+      background: transparent;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .site {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--paper);
+      padding-bottom: 14px;
+      margin-bottom: 18vh;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .topbar div span {
+      margin-left: 24px;
+    }
+
+    .hero {
+      width: fit-content;
+      /* display: block;
+      margin: auto; */
+      min-height: 80vh;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: -1;
+      margin-top: 50px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      /* font-size: clamp(46px, 12vw, 140px); */
+      font-size: 80px;
+      line-height: 0.9;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      max-width: 11ch;
+    }
+
+    .hero p {
+      margin-top: -40px;
+      max-width: 56ch;
+      /* color: var(--); */
+      /* font-size: clamp(16px, 2vw, 22px); */
+      font-size: 24px;
+      line-height: 1.4;
+      /* margin-left: 120px; */
+      text-align: center;
+    }
+
+    .stripe {
+      margin-top: 8vh;
+      border-top: 1px solid var(--paper);
+      padding-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--paper);
+    }
+
+    .installations {
+      margin-top: 10vh;
+      border-top: 1px solid var(--paper);
+      padding-top: 18px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 40px);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .installation-list {
+      display: grid;
+      gap: 26px;
+    }
+
+    .installation-item {
+      width: min(84vw, 920px);
+      /* border: 1px solid var(--paper); */
+      /* background: rgba(8, 8, 8, 0.6); */
+      /* backdrop-filter: blur(2px); */
+      /* box-shadow: 0 6px 6px rgba(255, 165, 0, 0.35); */
+      transition: margin 260ms ease;
+    }
+
+    .installation-item img {
+      width: 100%;
+      height: clamp(260px, 44vw, 520px);
+      display: block;
+      object-fit: cover;
+      /* filter: saturate(0.88) contrast(1.08); */
+    }
+
+    .installation-meta {
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      /* border-top: 1px solid rgba(239, 233, 223, 0.2); */
+    }
+
+    .installation-title {
+      margin: 0;
+      font-size: clamp(18px, 2.4vw, 28px);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .installation-info {
+      margin: 0;
+      color: var(--paper);
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .installation-index {
+      font-size: 13px;
+      color: var(--paper-soft);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .installation-item.align-left {
+      margin-left: 0;
+      margin-right: auto;
+    }
+
+    .installation-item.align-center {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .installation-item.align-right {
+      margin-left: auto;
+      margin-right: 0;
+    }
+
+    .shows {
+      margin-top: 112vh;
+      border-top: 1px solid var(--paper);
+      padding-top: 18px;
+    }
+
+    .shows-table {
+      /* border: 1px solid white; */
+      /* background: rgba(8, 8, 8, 0.5); */
+    }
+
+    .show-row {
+      display: grid;
+      grid-template-columns: 140px 1fr 1fr auto;
+      gap: 12px;
+      padding: 14px;
+      border-top: 1px solid var(--paper);
+      align-items: center;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .show-row:first-child {
+      border-top: none;
+    }
+
+    .show-row .label {
+      color: var(--paper);
+    }
+
+    .show-row .status {
+      border: 1px solid rgba(239, 233, 223, 0.35);
+      padding: 5px 8px;
+      justify-self: start;
+    }
+
+    .show-row .status.live {
+      color: #f4efde;
+      border-color: rgba(244, 239, 222, 0.8);
+      background: rgba(244, 239, 222, 0.08);
+    }
+
+    .accent {
+      color: var(--accent);
+    }
+
+    #shader-layer {
+      position: absolute;
+      z-index: 2;
+    }
+
+    @media (max-width: 700px) {
+      .site {
+        padding: 16px;
+      }
+
+      .topbar {
+        margin-bottom: 11vh;
+      }
+
+      .stripe {
+        flex-direction: column;
+      }
+
+      .installation-item {
+        width: 92vw;
+      }
+
+      .show-row {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <main class="site">
+    <div id="shader-layer"></div>
+    <header class="topbar">
+      <span>Future Storytelling Lab</span>
+      <!-- <span class="accent">Installations + Shows</span> -->
+      <div>
+        <span>About</span>
+        <span>Residents</span>
+        <span>Programme</span>
+        <span>Contact</span>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div>
+        <img src="./4x/fsl-logo@4x.png" />
+        <h1>Future Storytelling Lab.</h1>
+      </div>
+      <p>
+        Het Lab voor de makers van de toekomst
+      </p>
+    </section>
+
+    <section class="shows">
+      <div class="section-head">
+        <h2>Upcoming</h2>
+      </div>
+      <div class="shows-table">
+        <div class="show-row">
+          <span class="label">May 2026</span>
+          <span>FSL: Red Tide</span>
+          <span>Warehouse 9, Rotterdam</span>
+          <span class="status live">Live</span>
+        </div>
+        <div class="show-row">
+          <span class="label">Mar 2026</span>
+          <span>Pulse Chamber</span>
+          <span>Transit Hall, Berlin</span>
+          <span class="status">Archive</span>
+        </div>
+        <div class="show-row">
+          <span class="label">Nov 2025</span>
+          <span>Field Works</span>
+          <span>Dock Gallery, Lisbon</span>
+          <span class="status">Archive</span>
+        </div>
+        <div class="show-row">
+          <span class="label">Jun 2025</span>
+          <span>Reactive Terrain</span>
+          <span>Canal Stage, Amsterdam</span>
+          <span class="status">Archive</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="installations">
+      <div class="section-head">
+        <h2>Programme</h2>
+      </div>
+
+      <div class="installation-list">
+        <article class="installation-item align-left">
+          <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1400&q=80"
+            alt="Installation visual one">
+          <div class="installation-meta">
+            <div>
+              <h3 class="installation-title">Drift Field</h3>
+              <p class="installation-info">Immersive Projection • 2026</p>
+            </div>
+            <span class="installation-index">01</span>
+          </div>
+        </article>
+
+        <article class="installation-item align-center">
+          <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80"
+            alt="Installation visual two">
+          <div class="installation-meta">
+            <div>
+              <h3 class="installation-title">Signal Rooms</h3>
+              <p class="installation-info">Live Audiovisual Space • 2025</p>
+            </div>
+            <span class="installation-index">02</span>
+          </div>
+        </article>
+
+        <article class="installation-item align-right">
+          <img src="https://images.unsplash.com/photo-1493244040629-496f6d136cc3?auto=format&fit=crop&w=1400&q=80"
+            alt="Installation visual three">
+          <div class="installation-meta">
+            <div>
+              <h3 class="installation-title">Resonant Surface</h3>
+              <p class="installation-info">Generative Light System • 2024</p>
+            </div>
+            <span class="installation-index">03</span>
+          </div>
+        </article>
+
+        <article class="installation-item align-center">
+          <img src="https://images.unsplash.com/photo-1510784722466-f2aa9c52fff6?auto=format&fit=crop&w=1400&q=80"
+            alt="Installation visual four">
+          <div class="installation-meta">
+            <div>
+              <h3 class="installation-title">Red Matter Pavilion</h3>
+              <p class="installation-info">Spatial Performance Archive • 2023</p>
+            </div>
+            <span class="installation-index">04</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+
+    <section class="stripe">
+      <span>Future Storytelling Lab</span>
+      <span>© 2026</span>
+      <span>Contact</span>
+    </section>
+  </main>
+
+  <script>
+
+    // ================== PARTICLE SWARM ==================
+    const PARTICLE_COUNT = 2500;
+    const particles = [];
+
+    let mx = 0;
+    let my = 0;
+    let targetMX = 0;
+    let targetMY = 0;
+    let mouseActive = false;
+
+    class Particle {
+      constructor() {
+        this.x = random(window.innerWidth);
+        this.y = random(window.innerHeight);
+        this.vx = random(-0.4, 0.4);
+        this.vy = random(-0.4, 0.4);
+        this.size = random(1, 3);
+        this.speed = random(0.5, 1.2);
+        this.nox = random(10000);
+        this.noy = random(10000);
+        // Warm off-white palette with subtle variation
+        this.r = random(200, 255);
+        this.g = random(0, 170);
+        this.b = random(0, 0);
+        // this.a = random(90, 200);
+      }
+
+      update(t) {
+        // Perlin noise drift — slow and organic
+        const noiseScale = 0.00028;
+        const nx = (noise(this.nox + t * noiseScale) - 0.5) * 0.14;
+        const ny = (noise(this.noy + t * noiseScale) - 0.5) * 0.14;
+
+        // Slow attraction toward mouse
+        const dx = mx - this.x;
+        const dy = my - this.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) + 0.001;
+        const pull = this.speed * (mouseActive ? 0.045 : 0.004);
+
+        this.vx += (dx / dist) * pull + nx;
+        this.vy += (dy / dist) * pull + ny;
+
+        // Gentle damping so they drift, not fly
+        this.vx *= 0.97;
+        this.vy *= 0.97;
+
+        this.x += this.vx;
+        this.y += this.vy;
+
+        // Wrap edges
+        if (this.x < -6) this.x = width + 6;
+        else if (this.x > width + 6) this.x = -6;
+        if (this.y < -6) this.y = height + 6;
+        else if (this.y > height + 6) this.y = -6;
+      }
+
+      draw() {
+        fill(this.r, this.g, this.b, this.a);
+        rect(this.x, this.y, this.size);
+      }
+    }
+
+    function setup() {
+      const cnv = createCanvas(windowWidth, windowHeight);
+      cnv.parent("shader-layer");
+      noStroke();
+      mx = width / 2;
+      my = height / 2;
+      targetMX = mx;
+      targetMY = my;
+      for (let i = 0; i < PARTICLE_COUNT; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function draw() {
+      clear();
+
+      // Smooth mouse tracking
+      mx += (targetMX - mx) * 0.07;
+      my += (targetMY - my) * 0.07;
+
+      const t = millis();
+      noStroke();
+      for (const p of particles) {
+        p.update(t);
+        p.draw();
+      }
+    }
+
+    function windowResized() {
+      resizeCanvas(windowWidth, windowHeight);
+    }
+
+    window.addEventListener('pointermove', (e) => {
+      targetMX = e.clientX;
+      targetMY = e.clientY;
+      mouseActive = true;
+    }, { passive: true });
+
+  </script>
+
+</body>
+
+</html>
