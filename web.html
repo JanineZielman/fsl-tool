@@ -57,13 +57,18 @@
       padding: 24px;
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
     .topbar {
+      position: fixed;
+      width: 98vw;
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid var(--paper);
       padding-bottom: 14px;
-      margin-bottom: 18vh;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       font-size: 12px;
@@ -82,7 +87,7 @@
       left: 50%;
       transform: translateX(-50%);
       z-index: -1;
-      margin-top: 50px;
+      margin-top: 15%;
     }
 
     .hero h1 {
@@ -104,6 +109,19 @@
       line-height: 1.4;
       /* margin-left: 120px; */
       text-align: center;
+    }
+
+    .about {
+      margin-top: 100vh;
+      border-top: 1px solid var(--paper);
+      padding-top: 18px;
+    }
+
+    .about-copy {
+      max-width: 72ch;
+      font-size: 20px;
+      line-height: 1.65;
+      color: var(--paper);
     }
 
     .stripe {
@@ -210,14 +228,58 @@
     }
 
     .shows {
-      margin-top: 112vh;
+      margin-top: 10vh;
       border-top: 1px solid var(--paper);
       padding-top: 18px;
     }
 
+    .residents {
+      margin-top: 10vh;
+      border-top: 1px solid var(--paper);
+      padding-top: 18px;
+    }
+
+    .residents-track {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(280px, 34vw);
+      gap: 20px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      scroll-snap-type: x proximity;
+      scrollbar-width: thin;
+      scrollbar-color: var(--paper) transparent;
+    }
+
+    .resident-card {
+      scroll-snap-align: start;
+    }
+
+    .resident-card img {
+      width: 100%;
+      height: auto;
+      /* height: clamp(340px, 45vw, 520px); */
+      object-fit: cover;
+      display: block;
+    }
+
+    .resident-card h3 {
+      margin: 14px 0 6px;
+      font-size: clamp(18px, 2vw, 26px);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .resident-card p {
+      margin: 0;
+      color: var(--paper-soft);
+      font-size: 13px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
     .shows-table {
-      /* border: 1px solid white; */
-      /* background: rgba(8, 8, 8, 0.5); */
+      display: block;
     }
 
     .show-row {
@@ -278,9 +340,21 @@
         width: 92vw;
       }
 
+      .about {
+        margin-top: 86vh;
+      }
+
+      .about-copy {
+        font-size: 18px;
+      }
+
       .show-row {
         grid-template-columns: 1fr;
         gap: 6px;
+      }
+
+      .residents-track {
+        grid-auto-columns: 82vw;
       }
     }
   </style>
@@ -309,6 +383,18 @@
       </div>
       <p>
         Het Lab voor de makers van de toekomst
+      </p>
+    </section>
+
+    <section class="about">
+      <div class="section-head">
+        <h2>About</h2>
+      </div>
+      <p class="about-copy">
+        Future Storytelling Lab is a space for experimentation across visual culture, performance,
+        design, and digital narration. We bring together makers, researchers, and audiences through
+        public programmes, resident trajectories, and collaborative formats that explore how stories
+        can be built, experienced, and shared in new ways.
       </p>
     </section>
 
@@ -351,51 +437,73 @@
 
       <div class="installation-list">
         <article class="installation-item align-left">
-          <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1400&q=80"
-            alt="Installation visual one">
+          <img src="./Programma/661e66b58bc4935ac2ac284d_Into%20the%20com%20screenshot.png"
+            alt="Programme image for Into the Com">
           <div class="installation-meta">
             <div>
-              <h3 class="installation-title">Drift Field</h3>
-              <p class="installation-info">Immersive Projection • 2026</p>
+              <h3 class="installation-title">Into the Com</h3>
+              <p class="installation-info">Programme Feature</p>
             </div>
             <span class="installation-index">01</span>
           </div>
         </article>
 
         <article class="installation-item align-center">
-          <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80"
-            alt="Installation visual two">
+          <img src="./Programma/661e66b50a10be7ce7fe9321_screenshot%20chafik.png" alt="Programme image for Chafik">
           <div class="installation-meta">
             <div>
-              <h3 class="installation-title">Signal Rooms</h3>
-              <p class="installation-info">Live Audiovisual Space • 2025</p>
+              <h3 class="installation-title">Chafik</h3>
+              <p class="installation-info">Programme Feature</p>
             </div>
             <span class="installation-index">02</span>
           </div>
         </article>
 
         <article class="installation-item align-right">
-          <img src="https://images.unsplash.com/photo-1493244040629-496f6d136cc3?auto=format&fit=crop&w=1400&q=80"
-            alt="Installation visual three">
+          <img src="./Programma/661e66b5c9f555de53ac8feb_conclusie%20screenshot.png"
+            alt="Programme image for Conclusie">
           <div class="installation-meta">
             <div>
-              <h3 class="installation-title">Resonant Surface</h3>
-              <p class="installation-info">Generative Light System • 2024</p>
+              <h3 class="installation-title">Conclusie</h3>
+              <p class="installation-info">Programme Feature</p>
             </div>
             <span class="installation-index">03</span>
           </div>
         </article>
 
         <article class="installation-item align-center">
-          <img src="https://images.unsplash.com/photo-1510784722466-f2aa9c52fff6?auto=format&fit=crop&w=1400&q=80"
-            alt="Installation visual four">
+          <img src="./Programma/661fa84fb21afa0b0ef98e1e_Foto%20website.png"
+            alt="Programme image from the website archive">
           <div class="installation-meta">
             <div>
-              <h3 class="installation-title">Red Matter Pavilion</h3>
-              <p class="installation-info">Spatial Performance Archive • 2023</p>
+              <h3 class="installation-title">Foto Website</h3>
+              <p class="installation-info">Programme Feature</p>
             </div>
             <span class="installation-index">04</span>
           </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="residents">
+      <div class="section-head">
+        <h2>Residents</h2>
+      </div>
+      <div class="residents-track">
+        <article class="resident-card">
+          <img src="./Residents/668e8b0f3dde69f9bcd6258f_FSL%20Poster%20Lisa.png" alt="Resident poster for Lisa">
+          <h3>Lisa</h3>
+          <p>Resident</p>
+        </article>
+        <article class="resident-card">
+          <img src="./Residents/660d21b4033e61c889a989b6_FSL%20Poster%20Sophie.png" alt="Resident poster for Sophie">
+          <h3>Sophie</h3>
+          <p>Resident</p>
+        </article>
+        <article class="resident-card">
+          <img src="./Residents/660d1fe7d88b2b2db8eddb7f_FSL%20Poster%20Niek.png" alt="Resident poster for Niek">
+          <h3>Niek</h3>
+          <p>Resident</p>
         </article>
       </div>
     </section>
